@@ -2,27 +2,53 @@
 
 Elevideo es una aplicación web responsiva diseñada para convertir videos horizontales en formato vertical (9:16), optimizados para TikTok y YouTube Shorts, permitiendo a startups, pymes y creadores generar contenido de marketing de forma rápida y eficiente.
 
-🚀 Objetivo del Proyecto
+🎯 El Problema
 
-Reducir el tiempo y esfuerzo necesarios para reutilizar videos horizontales y transformarlos en shorts verticales listos para redes sociales, sin que este proceso se convierta en una carga operativa para el negocio.
+Hoy, la atención está en los formatos cortos y verticales.
+Sin embargo, crear este contenido requiere tiempo, herramientas complejas y procesos que no forman parte del core del negocio.
 
-🧩 Alcance del MVP (4 semanas)
+Muchas empresas ya tienen videos largos…
+pero no los reutilizan.
 
-El MVP de Elevideo incluye:
+💡 La Solución
 
-Subida de videos horizontales
+Elevideo automatiza la conversión de videos horizontales a verticales, permitiendo:
 
-Gestión y listado de videos
+Reutilizar contenido existente
 
-Procesamiento automático a formato vertical (9:16)
+Generar shorts en minutos
 
-Editor básico (auto-center / crop)
+Mantener presencia constante en redes
 
-Vista previa del resultado
+Enfocarse en vender, no en editar
 
-Descarga del video final
+✨ Qué hace Elevideo (MVP)
 
-UI responsiva (desktop y mobile)
+📤 Subida rápida de videos
+
+⚙️ Procesamiento automático a formato vertical (9:16)
+
+🎯 Editor inteligente (auto-center / crop)
+
+👀 Vista previa inmediata
+
+⬇️ Descarga lista para publicar
+
+📱 Experiencia totalmente responsiva
+
+
+🧠 Para quién es
+
+Startups
+
+Pymes
+
+Emprendedores
+
+Equipos de marketing
+
+Creadores de contenido
+
 
 🏗️ Arquitectura General
 
