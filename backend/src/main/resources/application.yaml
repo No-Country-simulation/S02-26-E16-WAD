@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: elevideo-backend
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+server:
+  port: 8081
