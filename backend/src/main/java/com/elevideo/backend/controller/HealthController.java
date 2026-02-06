@@ -13,7 +13,7 @@ public class HealthController {
     public Map<String, Object> health() {
         return Map.of(
                 "status", "OK",
-                "service", "Elevideo Backend",
+                "service", "Elevideo Backen",
                 "time", LocalDateTime.now().toString()
         );
     }
