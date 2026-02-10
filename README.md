@@ -107,6 +107,14 @@ Week 3: Editor vertical y procesamiento
 
 Week 4: UX, responsive, QA y entrega
 
+Inicio del Sistema con Bash:
+Elevideo App
+frontend:npm run dev
+backend:./mvnw spring-boot:run
+postgress:
+clave:americas
+puerto:5432
+
 El detalle de tareas se gestiona en GitHub Projects.
 
 📌 Gestión del Proyecto

@@ -1,12 +1,13 @@
 package com.elevideo.backend;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootApplication
-public class ElevideoBackendApplication {
+@SpringBootTest
+class ElevideoBackendApplicationTests {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ElevideoBackendApplication.class, args);
+    @Test
+    void contextLoads() {
+        // Si la app arranca, el test pasa
     }
 }
