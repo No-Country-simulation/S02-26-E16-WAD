@@ -1,4 +1,4 @@
-package com.elevideo.backend.api;
+package com.elevideo.backend.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +13,7 @@ public class HealthController {
     public Map<String, Object> health() {
         return Map.of(
                 "status", "OK",
-                "service", "Elevideo Backend",
+                "service", "Elevideo Backen",
                 "time", LocalDateTime.now().toString()
         );
     }
