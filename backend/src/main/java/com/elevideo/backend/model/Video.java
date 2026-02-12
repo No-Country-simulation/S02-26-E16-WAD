@@ -1,5 +1,6 @@
 package com.elevideo.backend.model;
 
+import com.elevideo.backend.enums.VideoStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;

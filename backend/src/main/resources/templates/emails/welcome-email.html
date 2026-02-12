@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a Elevideo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 30px;
+        }
+        .content h2 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+        .footer {
+            background-color: #f8f8f8;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+        .highlight {
+            background-color: #f0f4ff;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>¡Bienvenido a Elevideo!</h1>
+    </div>
+
+    <div class="content">
+        <h2>Hola, <span th:text="${userName}">Usuario</span>! 👋</h2>
+
+        <p>Nos alegra tenerte con nosotros. Tu cuenta ha sido creada exitosamente y estás listo para comenzar a crear contenido increíble.</p>
+
+        <div class="highlight">
+            <p><strong>Detalles de tu cuenta:</strong></p>
+            <ul>
+                <li>Email: <span th:text="${userEmail}">user@example.com</span></li>
+                <li>Fecha de registro: <span th:text="${registrationDate}">2026-02-10</span></li>
+            </ul>
+        </div>
+
+        <p>Para comenzar, haz clic en el siguiente botón para verificar tu cuenta:</p>
+
+        <a th:href="${verificationLink}" class="button">Verificar mi cuenta</a>
+
+        <p style="margin-top: 30px; color: #666; font-size: 14px;">
+            Si no creaste esta cuenta, por favor ignora este correo.
+        </p>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 Elevideo. Todos los derechos reservados.</p>
+        <p>Este es un correo automático, por favor no respondas a este mensaje.</p>
+    </div>
+</div>
+</body>
+</html>
