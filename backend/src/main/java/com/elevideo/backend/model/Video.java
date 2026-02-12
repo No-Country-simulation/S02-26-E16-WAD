@@ -1,16 +1,16 @@
 package com.elevideo.backend.model;
 
+import com.elevideo.backend.enums.VideoStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "videos")
 public class Video {
 
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String originalUrl;
@@ -23,17 +23,11 @@ public class Video {
     private LocalDateTime createdAt;
 
     protected Video() {
-        // JPA only
-    }
-
-    public Video(String originalUrl) {
-        this.originalUrl = originalUrl;
-        this.status = VideoStatus.UPLOADED;
         this.createdAt = LocalDateTime.now();
+        this.status = VideoStatus.UPLOADED;
     }
 
-    // Getters
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
@@ -49,7 +43,6 @@ public class Video {
         return createdAt;
     }
 
-    // Setter controlado (para el próximo epic)
     public void setStatus(VideoStatus status) {
         this.status = status;
     }

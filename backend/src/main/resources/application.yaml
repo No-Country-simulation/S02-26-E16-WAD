@@ -2,10 +2,6 @@ spring:
   application:
     name: elevideo-backend
 
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-
   servlet:
     multipart:
       enabled: true
@@ -18,15 +14,39 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
-    jpa:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
       hibernate:
-        ddl-auto: update
-      show-sql: true
-      properties:
-        hibernate:
-          format_sql: true
-          dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   port: ${PORT:8081}
 
+
+jwt:
+  secret: ${JWT_SECRET:TTE1M0NyM3RLM3lQYXJhSldUc011eVMyZ3VyNHlMNHJnNA==}
+  expiration: ${JWT_EXPIRATION:3600000}
+
+
+app:
+  frontend:
+    base-url: ${FRONTEND_BASE_URL:http://localhost:3000}
+    verify-email-path: ${FRONTEND_VERIFY_EMAIL_PATH:/verify-email}
+    reset-password-path: ${FRONTEND_RESET_PASSWORD_PATH:/reset-password}
+
+
+resend:
+  api-key: ${RESEND_APIKEY}
+  from-email: ${RESEND_EMAIL}
+  from-name: ${RESEND_NAME}
+
+
+logging:
+  level:
+    org.hibernate.SQL: ERROR
+    org.hibernate.type: ERROR
+    org.hibernate.stat: ERROR
