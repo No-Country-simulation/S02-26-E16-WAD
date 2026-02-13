@@ -21,7 +21,13 @@ public class Video {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    // 🔒 Constructor protegido requerido por JPA
     protected Video() {
+    }
+
+    // ✅ Constructor público para crear nuevos videos
+    public Video(String originalUrl) {
+        this.originalUrl = originalUrl;
         this.createdAt = LocalDateTime.now();
         this.status = VideoStatus.UPLOADED;
     }

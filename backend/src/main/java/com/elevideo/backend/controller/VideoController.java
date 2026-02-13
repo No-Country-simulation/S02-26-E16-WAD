@@ -1,18 +1,16 @@
 package com.elevideo.backend.controller;
 
+import com.elevideo.backend.model.Video;
 import com.elevideo.backend.service.VideoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/videos")
 public class VideoController {
-
-    private static final long MAX_FILE_SIZE = 500 * 1024 * 1024;
 
     private final VideoService videoService;
 
@@ -20,45 +18,24 @@ public class VideoController {
         this.videoService = videoService;
     }
 
+    // ✅ Upload simple (solo persistencia por ahora)
+    @PostMapping("/upload")
+    public ResponseEntity<Video> uploadVideo(@RequestParam("file") MultipartFile file) {
+
+        // Aquí luego irá la lógica real de almacenamiento
+        String fakeUrl = "local-storage/" + file.getOriginalFilename();
+
+        Video video = new Video(fakeUrl);
+
+        Video savedVideo = videoService.save(video);
+
+        return ResponseEntity.ok(savedVideo);
+    }
+
+    // ✅ Obtener todos los videos
     @GetMapping
-    public ResponseEntity<?> getAllVideos() {
+    public ResponseEntity<List<Video>> getAllVideos() {
         return ResponseEntity.ok(videoService.getAllVideos());
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadVideo(
-            @RequestParam("file") MultipartFile file
-    ) {
-
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("error", "archivo vacio")
-            );
-        }
-
-        if (!file.getContentType().startsWith("video/")) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("error", "Tipo de archivo invalido")
-            );
-        }
-
-        if (file.getSize() > MAX_FILE_SIZE) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("error", "Archivo muy grande")
-            );
-        }
-
-        String videoId = UUID.randomUUID().toString();
-
-        return ResponseEntity.ok(
-                Map.of(
-                        "videoId", videoId,
-                        "filename", file.getOriginalFilename(),
-                        "size", file.getSize(),
-                        "contentType", file.getContentType(),
-                        "status", "UPLOADED"
-                )
-        );
-    }
 }
-
