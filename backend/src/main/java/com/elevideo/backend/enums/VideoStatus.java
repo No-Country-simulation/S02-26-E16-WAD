@@ -1,4 +1,4 @@
-package com.elevideo.backend.model;
+package com.elevideo.backend.enums;
 
 public enum VideoStatus {
     UPLOADED,
