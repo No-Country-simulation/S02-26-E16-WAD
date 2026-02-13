@@ -1,5 +1,6 @@
 package com.elevideo.backend.controller;
 
+import com.elevideo.backend.service.VideoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,7 +12,18 @@ import java.util.UUID;
 @RequestMapping("/api/videos")
 public class VideoController {
 
-    private static final long MAX_FILE_SIZE = 500 * 1024 * 1024; // 500 MB
+    private static final long MAX_FILE_SIZE = 500 * 1024 * 1024;
+
+    private final VideoService videoService;
+
+    public VideoController(VideoService videoService) {
+        this.videoService = videoService;
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllVideos() {
+        return ResponseEntity.ok(videoService.getAllVideos());
+    }
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadVideo(
@@ -49,3 +61,4 @@ public class VideoController {
         );
     }
 }
+

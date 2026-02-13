@@ -3,6 +3,8 @@ package com.elevideo.backend.service;
 import com.elevideo.backend.model.Video;
 import com.elevideo.backend.repository.VideoRepository;
 import org.springframework.stereotype.Service;
+import java.util.List;
+
 
 @Service
 public class VideoService {
@@ -16,5 +18,10 @@ public class VideoService {
     public Video save(Video video) {
         return videoRepository.save(video);
     }
+
+    public List<Video> getAllVideos() {
+        return videoRepository.findAll();
+    }
+
 }
 
