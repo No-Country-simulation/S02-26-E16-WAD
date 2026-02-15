@@ -23,5 +23,17 @@ public class VideoService {
         return videoRepository.findAll();
     }
 
+    public void delete(Long id) {
+        Video video = videoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Video not found"));
+
+        videoRepository.delete(video);
+    }
+
+    public Video getById(Long id) {
+        return videoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Video not found"));
+    }
+
 }
 

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/videos")
@@ -17,15 +18,28 @@ public class VideoController {
     public VideoController(VideoService videoService) {
         this.videoService = videoService;
     }
+    
+    //prueva cloudinary
 
-    // ✅ Upload simple (solo persistencia por ahora)
+    @Value("${cloudinary.cloud-name}")
+    private String cloudName;
+
+    @GetMapping("/test-env")
+    public ResponseEntity<String> testEnv() {
+        return ResponseEntity.ok("Cloud name: " + cloudName);
+    }
+
+
+
+    // ✅ Upload simple (simulado)
     @PostMapping("/upload")
     public ResponseEntity<Video> uploadVideo(@RequestParam("file") MultipartFile file) {
 
-        // Aquí luego irá la lógica real de almacenamiento
+        // Simulación temporal
         String fakeUrl = "local-storage/" + file.getOriginalFilename();
+        String fakePublicId = UUID.randomUUID().toString(); // Genera ID único
 
-        Video video = new Video(fakeUrl);
+        Video video = new Video(fakeUrl, fakePublicId);
 
         Video savedVideo = videoService.save(video);
 
@@ -36,6 +50,19 @@ public class VideoController {
     @GetMapping
     public ResponseEntity<List<Video>> getAllVideos() {
         return ResponseEntity.ok(videoService.getAllVideos());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVideo(@PathVariable Long id) {
+
+        videoService.delete(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Video> getVideoById(@PathVariable Long id) {
+        return ResponseEntity.ok(videoService.getById(id));
     }
 
 }

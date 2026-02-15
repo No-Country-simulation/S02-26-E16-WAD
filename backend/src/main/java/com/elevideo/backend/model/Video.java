@@ -2,6 +2,7 @@ package com.elevideo.backend.model;
 
 import com.elevideo.backend.enums.VideoStatus;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,32 +14,57 @@ public class Video {
     private Long id;
 
     @Column(nullable = false)
-    private String originalUrl;
+    private String url;
+
+    @Column(nullable = false, unique = true)
+    private String publicId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private VideoStatus status;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // 🔒 Constructor protegido requerido por JPA
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    // Constructor protegido requerido por JPA
     protected Video() {
     }
 
-    // ✅ Constructor público para crear nuevos videos
-    public Video(String originalUrl) {
-        this.originalUrl = originalUrl;
-        this.createdAt = LocalDateTime.now();
+    // Constructor para nuevos videos
+    public Video(String url, String publicId) {
+        this.url = url;
+        this.publicId = publicId;
         this.status = VideoStatus.UPLOADED;
     }
+
+    // Se ejecuta automáticamente antes de guardar
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    //  Se ejecuta antes de actualizar
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // Getters
 
     public Long getId() {
         return id;
     }
 
-    public String getOriginalUrl() {
-        return originalUrl;
+    public String getUrl() {
+        return url;
+    }
+
+    public String getPublicId() {
+        return publicId;
     }
 
     public VideoStatus getStatus() {
@@ -49,6 +75,11 @@ public class Video {
         return createdAt;
     }
 
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    // Setter controlado (solo status puede cambiar)
     public void setStatus(VideoStatus status) {
         this.status = status;
     }
