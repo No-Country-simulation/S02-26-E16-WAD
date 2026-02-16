@@ -13,11 +13,13 @@ public class Video {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "original_url", nullable = false)
     private String url;
 
-    @Column(nullable = false, unique = true)
+
+    @Column(name = "public_id", nullable = false, unique = true)
     private String publicId;
+
 
     // (nullable por seguridad en migración)
     @Column
@@ -33,11 +35,13 @@ public class Video {
     @Column(nullable = false)
     private VideoStatus status;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
 
     // Constructor protegido requerido por JPA
     protected Video() {
