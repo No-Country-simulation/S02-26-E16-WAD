@@ -22,6 +22,7 @@ spring:
       hibernate:
         format_sql: false
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        open-in-view: false
 
 server:
   port: ${PORT:8081}
