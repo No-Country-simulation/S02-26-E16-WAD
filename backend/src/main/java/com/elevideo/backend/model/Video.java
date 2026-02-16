@@ -19,6 +19,16 @@ public class Video {
     @Column(nullable = false, unique = true)
     private String publicId;
 
+    // (nullable por seguridad en migración)
+    @Column
+    private Double duration;   // Duración en segundos
+
+    @Column(length = 50)
+    private String format;     // mp4, mov, etc
+
+    @Column
+    private Integer bytes;     // Tamaño en bytes
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private VideoStatus status;
@@ -33,10 +43,13 @@ public class Video {
     protected Video() {
     }
 
-    // Constructor para nuevos videos
-    public Video(String url, String publicId) {
+    // Constructor principal
+    public Video(String url, String publicId, Double duration, String format, Integer bytes) {
         this.url = url;
         this.publicId = publicId;
+        this.duration = duration;
+        this.format = format;
+        this.bytes = bytes;
         this.status = VideoStatus.UPLOADED;
     }
 
@@ -47,13 +60,15 @@ public class Video {
         this.updatedAt = LocalDateTime.now();
     }
 
-    //  Se ejecuta antes de actualizar
+    // Se ejecuta antes de actualizar
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 
+    // =======================
     // Getters
+    // =======================
 
     public Long getId() {
         return id;
@@ -65,6 +80,18 @@ public class Video {
 
     public String getPublicId() {
         return publicId;
+    }
+
+    public Double getDuration() {
+        return duration;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public Integer getBytes() {
+        return bytes;
     }
 
     public VideoStatus getStatus() {
@@ -79,7 +106,10 @@ public class Video {
         return updatedAt;
     }
 
-    // Setter controlado (solo status puede cambiar)
+    // =======================
+    // Setter controlado
+    // =======================
+
     public void setStatus(VideoStatus status) {
         this.status = status;
     }

@@ -1,63 +1,29 @@
-package com.elevideo.backend.controller;
-
-import com.elevideo.backend.model.Video;
-import com.elevideo.backend.service.VideoService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/api/videos")
 public class VideoController {
 
     private final VideoService videoService;
+    private final CloudinaryService cloudinaryService;
 
-    public VideoController(VideoService videoService) {
+    public VideoController(VideoService videoService,
+                           CloudinaryService cloudinaryService) {
         this.videoService = videoService;
-    }
-    
-    //prueva cloudinary
-
-    @Value("${cloudinary.cloud-name}")
-    private String cloudName;
-
-    @GetMapping("/test-env")
-    public ResponseEntity<String> testEnv() {
-        return ResponseEntity.ok("Cloud name: " + cloudName);
+        this.cloudinaryService = cloudinaryService;
     }
 
-
-
-    // ✅ Upload simple (simulado)
     @PostMapping("/upload")
-    public ResponseEntity<Video> uploadVideo(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Video> uploadVideo(@RequestParam("file") MultipartFile file) throws IOException {
 
-        // Simulación temporal
-        String fakeUrl = "local-storage/" + file.getOriginalFilename();
-        String fakePublicId = UUID.randomUUID().toString(); // Genera ID único
+        Map<String, Object> result = cloudinaryService.uploadVideo(file);
 
-        Video video = new Video(fakeUrl, fakePublicId);
-
-        Video savedVideo = videoService.save(video);
+        Video savedVideo = videoService.createAndSave(result);
 
         return ResponseEntity.ok(savedVideo);
     }
 
-    // ✅ Obtener todos los videos
     @GetMapping
     public ResponseEntity<List<Video>> getAllVideos() {
         return ResponseEntity.ok(videoService.getAllVideos());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVideo(@PathVariable Long id) {
-
-        videoService.delete(id);
-
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
@@ -65,4 +31,15 @@ public class VideoController {
         return ResponseEntity.ok(videoService.getById(id));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVideo(@PathVariable Long id) throws IOException {
+
+        Video video = videoService.getById(id);
+
+        cloudinaryService.deleteVideo(video.getPublicId());
+
+        videoService.delete(video);
+
+        return ResponseEntity.noContent().build();
+    }
 }

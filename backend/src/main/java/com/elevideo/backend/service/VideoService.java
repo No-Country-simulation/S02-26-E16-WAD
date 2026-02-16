@@ -3,8 +3,9 @@ package com.elevideo.backend.service;
 import com.elevideo.backend.model.Video;
 import com.elevideo.backend.repository.VideoRepository;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class VideoService {
@@ -15,7 +16,26 @@ public class VideoService {
         this.videoRepository = videoRepository;
     }
 
-    public Video save(Video video) {
+    // Crear y guardar video desde resultado de Cloudinary
+    public Video createAndSave(Map<String, Object> uploadResult) {
+
+        String url = uploadResult.get("secure_url").toString();
+        String publicId = uploadResult.get("public_id").toString();
+
+        Double duration = uploadResult.get("duration") != null
+                ? Double.valueOf(uploadResult.get("duration").toString())
+                : null;
+
+        String format = uploadResult.get("format") != null
+                ? uploadResult.get("format").toString()
+                : null;
+
+        Integer bytes = uploadResult.get("bytes") != null
+                ? Integer.valueOf(uploadResult.get("bytes").toString())
+                : null;
+
+        Video video = new Video(url, publicId, duration, format, bytes);
+
         return videoRepository.save(video);
     }
 
@@ -23,17 +43,12 @@ public class VideoService {
         return videoRepository.findAll();
     }
 
-    public void delete(Long id) {
-        Video video = videoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Video not found"));
-
-        videoRepository.delete(video);
-    }
-
     public Video getById(Long id) {
         return videoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Video not found"));
     }
 
+    public void delete(Video video) {
+        videoRepository.delete(video);
+    }
 }
-
