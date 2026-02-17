@@ -214,6 +214,94 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
+    /**
+     * Maneja proyecto no encontrado.
+     */
+    @ExceptionHandler(ProjectNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleProjectNotFound(
+            ProjectNotFoundException ex,
+            HttpServletRequest request) {
+
+        log.warn("📁 Proyecto no encontrado: {}", ex.getMessage());
+
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error("PROJECT_NOT_FOUND")
+                .message("Proyecto no encontrado")
+                .details(List.of(ex.getMessage()))
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    /**
+     * Maneja video no encontrado.
+     */
+    @ExceptionHandler(VideoNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleVideoNotFound(
+            VideoNotFoundException ex,
+            HttpServletRequest request) {
+
+        log.warn("🎬 Video no encontrado: {}", ex.getMessage());
+
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error("VIDEO_NOT_FOUND")
+                .message("Video no encontrado")
+                .details(List.of(ex.getMessage()))
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    /**
+     * Maneja acceso prohibido por reglas de negocio.
+     */
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorResponse> handleForbiddenException(
+            ForbiddenException ex,
+            HttpServletRequest request) {
+
+        log.warn("⛔ Operación prohibida: {}", ex.getMessage());
+
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.FORBIDDEN.value())
+                .error("FORBIDDEN_OPERATION")
+                .message("No tienes permisos para realizar esta acción")
+                .details(List.of(ex.getMessage()))
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
+    /**
+     * Maneja errores al subir archivos a Cloudinary.
+     */
+    @ExceptionHandler(CloudinaryUploadException.class)
+    public ResponseEntity<ErrorResponse> handleCloudinaryUploadException(
+            CloudinaryUploadException ex,
+            HttpServletRequest request) {
+
+        log.error("☁️ Error al subir archivo a Cloudinary: {}", ex.getMessage());
+
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_GATEWAY.value())
+                .error("CLOUDINARY_UPLOAD_ERROR")
+                .message("Error al procesar el archivo en el servicio externo")
+                .details(List.of("No se pudo completar la carga del archivo. Intenta nuevamente"))
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(error);
+    }
+
     // ==================== EXCEPCIONES DE VALIDACIÓN ====================
 
     /**
