@@ -1,54 +1,59 @@
 package com.elevideo.backend.controller;
 
-import org.springframework.web.bind.annotation.*;
+import com.elevideo.backend.documentation.video.CreateVideoEndpointDoc;
+import com.elevideo.backend.documentation.video.DeleteVideoEndpointDoc;
+import com.elevideo.backend.documentation.video.GetVideoByIdEndpointDoc;
+import com.elevideo.backend.documentation.video.GetVideosEndpointDoc;
+import com.elevideo.backend.dto.ApiResult;
+import com.elevideo.backend.dto.video.*;
+import com.elevideo.backend.service.VideoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/videos")
+@RequestMapping("/api/v1/projects/{projectId}/videos")
+@RequiredArgsConstructor
+@Tag(name = "03 - Videos", description = "Endpoints para gestión de videos de proyectos")
 public class VideoController {
 
     private final VideoService videoService;
-    private final CloudinaryService cloudinaryService;
 
-    public VideoController(VideoService videoService,
-                           CloudinaryService cloudinaryService) {
-        this.videoService = videoService;
-        this.cloudinaryService = cloudinaryService;
+    @CreateVideoEndpointDoc
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResult<VideoResponse>> createVideo(@PathVariable Long projectId,@ModelAttribute @Valid CreateVideoRequest request) {
+        VideoResponse response = videoService.createVideo(projectId, request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResult.success(response, "Video creado correctamente"));
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<Video> uploadVideo(@RequestParam("file") MultipartFile file) throws IOException {
-
-        Map<String, Object> result = cloudinaryService.uploadVideo(file);
-
-        Video savedVideo = videoService.createAndSave(result);
-
-        return ResponseEntity.ok(savedVideo);
-    }
-
+    @GetVideosEndpointDoc
     @GetMapping
-    public ResponseEntity<List<Video>> getAllVideos() {
-        return ResponseEntity.ok(videoService.getAllVideos());
+    public ResponseEntity<?> getVideos(@PathVariable Long projectId, @ModelAttribute VideoSearchRequest searchParams){
+        Page<VideoSummaryResponse> response = videoService.getVideos(projectId, searchParams);
+        return ResponseEntity.ok(
+                ApiResult.success(response, "Videos obtenidos correctamente")
+        );
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Video> getVideoById(@PathVariable Long id) {
-        return ResponseEntity.ok(videoService.getById(id));
+    @GetVideoByIdEndpointDoc
+    @GetMapping("/{videoId}")
+    public ResponseEntity<ApiResult<VideoSummaryResponse>> getVideoById(@PathVariable Long projectId, @PathVariable Long videoId) {
+        VideoSummaryResponse response = videoService.getVideoById(videoId);
+        return ResponseEntity.ok(
+                ApiResult.success(response, "Video obtenido correctamente")
+        );
     }
 
+    @DeleteVideoEndpointDoc
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVideo(@PathVariable Long id) throws IOException {
-
-        Video video = videoService.getById(id);
-
-        cloudinaryService.deleteVideo(video.getPublicId());
-
-        videoService.delete(video);
-
+    public ResponseEntity<Void> deleteVideo(@PathVariable Long id) {
+        videoService.deleteVideo(id);
         return ResponseEntity.noContent().build();
     }
 }

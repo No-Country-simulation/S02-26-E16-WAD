@@ -17,7 +17,7 @@ public class SwaggerConfig {
                         .description("Aplicación API Rest para la plataforma NoCountry")
                         .version("v1.0.0"))
                 .components(new Components()
-                        .addSecuritySchemes("bearer-key",
+                        .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")));
     }
 }

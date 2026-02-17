@@ -1,52 +1,37 @@
 package com.elevideo.backend.model;
 
-import com.elevideo.backend.enums.VideoStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "videos")
-public class Video {
+@Table(name = "projects")
+public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    String title;
+    private String name;
 
-    @Column(nullable = false)
-    private String secureUrl;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
-    @Column(nullable = false)
-    private String publicId;
-
-    @Column(nullable = false)
-    private String format;
-
-    @Column(nullable = false)
-    private Long durationInMillis;
-
-    private Long sizeInBytes;
-
-    private Integer width;
-    private Integer height;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Video> videos = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "project_id", nullable = false)
-    private Project project;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private VideoStatus status;
-
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
@@ -62,6 +47,4 @@ public class Video {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
-
 }
