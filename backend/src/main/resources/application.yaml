@@ -5,8 +5,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 500MB
-      max-request-size: 500MB
+      max-file-size: 200MB
+      max-request-size: 200MB
 
   datasource:
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
@@ -44,9 +44,24 @@ resend:
   from-email: ${RESEND_EMAIL}
   from-name: ${RESEND_NAME}
 
+springdoc:
+  swagger-ui:
+    operationsSorter: method
+    tagsSorter: alpha
 
 logging:
   level:
     org.hibernate.SQL: ERROR
     org.hibernate.type: ERROR
     org.hibernate.stat: ERROR
+
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
+
+
+web:
+  cors:
+    allowed-origins: ${CORS_ALLOWED:http://localhost:*}
