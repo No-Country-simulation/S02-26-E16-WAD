@@ -1,54 +1,30 @@
 package com.elevideo.backend.service;
 
-import com.elevideo.backend.model.Video;
-import com.elevideo.backend.repository.VideoRepository;
+import com.elevideo.backend.dto.video.CreateVideoRequest;
+import com.elevideo.backend.dto.video.VideoResponse;
+import com.elevideo.backend.dto.video.VideoSearchRequest;
+import com.elevideo.backend.dto.video.VideoSummaryResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
 
 @Service
-public class VideoService {
+public interface VideoService {
 
-    private final VideoRepository videoRepository;
 
-    public VideoService(VideoRepository videoRepository) {
-        this.videoRepository = videoRepository;
-    }
+    VideoResponse createVideo(Long projectId, CreateVideoRequest request);
 
-    // Crear y guardar video desde resultado de Cloudinary
-    public Video createAndSave(Map<String, Object> uploadResult) {
+    /**
+     * Obtiene todos los videos del usuario autenticado con paginación y filtros opcionales.
+     * Si no se proporcionan filtros en searchParams, retorna todos los videos del usuario.
+     *
+     * @param searchParams Parámetros de búsqueda, filtrado y paginación (todos opcionales)
+     * @return Página de videos con resumen de información
+     */
+    Page<VideoSummaryResponse> getVideos(Long projectId, VideoSearchRequest searchParams);
 
-        String url = uploadResult.get("secure_url").toString();
-        String publicId = uploadResult.get("public_id").toString();
+    VideoSummaryResponse getVideoById(Long videoId);
 
-        Double duration = uploadResult.get("duration") != null
-                ? Double.valueOf(uploadResult.get("duration").toString())
-                : null;
-
-        String format = uploadResult.get("format") != null
-                ? uploadResult.get("format").toString()
-                : null;
-
-        Integer bytes = uploadResult.get("bytes") != null
-                ? Integer.valueOf(uploadResult.get("bytes").toString())
-                : null;
-
-        Video video = new Video(url, publicId, duration, format, bytes);
-
-        return videoRepository.save(video);
-    }
-
-    public List<Video> getAllVideos() {
-        return videoRepository.findAll();
-    }
-
-    public Video getById(Long id) {
-        return videoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Video not found"));
-    }
-
-    public void delete(Video video) {
-        videoRepository.delete(video);
-    }
+    void deleteVideo(Long id);
 }
+

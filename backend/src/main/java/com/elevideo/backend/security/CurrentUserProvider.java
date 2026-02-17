@@ -1,6 +1,5 @@
 package com.elevideo.backend.security;
 
-import com.elevideo.backend.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,7 @@ public class CurrentUserProvider {
             throw new RuntimeException("User not authenticated");
         }
 
-        User principal = (User) auth.getPrincipal();
+        CustomUserDetails principal = (CustomUserDetails) auth.getPrincipal();
         return principal.getId();
     }
 }
