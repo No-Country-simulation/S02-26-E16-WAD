@@ -1,6 +1,9 @@
 package com.elevideo.backend.model;
 
+import jakarta.annotation.Resource;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,10 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
+@Builder
 @Entity
 @Table(name = "projects")
 public class Project {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +42,9 @@ public class Project {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    public static Resource builder() {return null;
+    }
 
     @PrePersist
     protected void onCreate() {
