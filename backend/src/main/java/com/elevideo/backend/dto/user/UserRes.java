@@ -11,4 +11,6 @@ public record UserRes(
         String emailVerified,
         LocalDateTime createdAt
 ) {
+    public void setFirstName(String firstName) {
+    }
 }

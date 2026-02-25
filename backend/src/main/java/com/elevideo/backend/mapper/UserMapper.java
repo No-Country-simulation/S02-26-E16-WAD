@@ -3,6 +3,7 @@ package com.elevideo.backend.mapper;
 
 import com.elevideo.backend.dto.JwtDataDto;
 import com.elevideo.backend.dto.auth.RegisterReq;
+import com.elevideo.backend.dto.user.AuthenticatedUserResponse;
 import com.elevideo.backend.dto.user.UserRes;
 import com.elevideo.backend.enums.AccountStatus;
 import com.elevideo.backend.model.User;
@@ -22,4 +23,8 @@ public interface UserMapper {
 
     @Mapping(target = "id", source = "id")
     JwtDataDto toJwtDataDto(User user);
+
+    AuthenticatedUserResponse toAuthenticatedUserResponse(User user);
+
+
 }
