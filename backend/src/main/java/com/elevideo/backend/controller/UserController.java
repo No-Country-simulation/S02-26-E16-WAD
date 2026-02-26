@@ -2,6 +2,7 @@ package com.elevideo.backend.controller;
 
 import com.elevideo.backend.dto.ApiResult;
 import com.elevideo.backend.dto.user.AuthenticatedUserResponse;
+import com.elevideo.backend.dto.user.ChangePasswordRequest;
 import com.elevideo.backend.dto.user.UserRes;
 import com.elevideo.backend.dto.user.UserUpdateRequest;
 import com.elevideo.backend.service.UserService;
@@ -42,6 +43,16 @@ public class UserController {
         return ResponseEntity.ok(ApiResult.success(response,"Datos actuallizados correctamente"));
 
     }
+
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<Void> changePassword(
+            @PathVariable UUID id,
+            @RequestBody ChangePasswordRequest request
+    ) {
+        userService.changePassword(id, request);
+        return ResponseEntity.noContent().build(); // 204
+    }
+
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable UUID id) {

@@ -13,4 +13,7 @@ public record UserRes(
 ) {
     public void setFirstName(String firstName) {
     }
+
+    public void setLastName(String lastName) {
+    }
 }
