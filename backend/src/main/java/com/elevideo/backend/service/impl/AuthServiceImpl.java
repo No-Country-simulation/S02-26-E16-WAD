@@ -200,7 +200,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private String generateVerificationToken(User user) {
         JwtDataDto jwtData = userMapper.toJwtDataDto(user);
-        return jwtService.generateToken(jwtData, TokenPurpose.EMAIL_VERIFICATION);
+        return jwtService.generateUserToken(jwtData, TokenPurpose.EMAIL_VERIFICATION);
     }
 
     /**
@@ -208,7 +208,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private String generateAccessToken(User user) {
         JwtDataDto jwtData = userMapper.toJwtDataDto(user);
-        return jwtService.generateToken(jwtData, TokenPurpose.AUTHENTICATION);
+        return jwtService.generateUserToken(jwtData, TokenPurpose.AUTHENTICATION);
     }
 
     /**
@@ -216,7 +216,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private String generatePasswordResetToken(User user) {
         JwtDataDto jwtData = userMapper.toJwtDataDto(user);
-        return jwtService.generateToken(jwtData, TokenPurpose.PASSWORD_RESET);
+        return jwtService.generateUserToken(jwtData, TokenPurpose.PASSWORD_RESET);
     }
 
     /**

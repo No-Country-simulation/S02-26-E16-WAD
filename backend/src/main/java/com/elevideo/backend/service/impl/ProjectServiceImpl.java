@@ -1,4 +1,4 @@
-package com.elevideo.backend.service;
+package com.elevideo.backend.service.impl;
 
 import com.elevideo.backend.dto.project.ProjectPageableRequest;
 import com.elevideo.backend.dto.project.ProjectRequest;
@@ -9,9 +9,9 @@ import com.elevideo.backend.model.Project;
 import com.elevideo.backend.model.User;
 import com.elevideo.backend.repository.ProjectRepository;
 import com.elevideo.backend.repository.UserRepository;
+import com.elevideo.backend.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
