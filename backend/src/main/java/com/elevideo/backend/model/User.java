@@ -34,7 +34,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private boolean emailVerified;
+    boolean emailVerified;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projects = new ArrayList<>();
