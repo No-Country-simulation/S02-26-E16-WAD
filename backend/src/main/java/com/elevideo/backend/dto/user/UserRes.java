@@ -11,9 +11,4 @@ public record UserRes(
         String emailVerified,
         LocalDateTime createdAt
 ) {
-    public void setFirstName(String firstName) {
-    }
-
-    public void setLastName(String lastName) {
-    }
 }
