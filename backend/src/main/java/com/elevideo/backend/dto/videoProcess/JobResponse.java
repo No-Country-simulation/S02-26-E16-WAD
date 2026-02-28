@@ -1,6 +1,6 @@
 package com.elevideo.backend.dto.videoProcess;
 
-import com.elevideo.backend.enums.JobStatus;
+
 
 public record JobResponse(
         String jobId,

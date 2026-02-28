@@ -1,13 +1,18 @@
 package com.elevideo.backend.controller;
 
+import com.elevideo.backend.documentation.videoProcessing.ProcessVideoEndpointDoc;
 import com.elevideo.backend.dto.ApiResult;
-import com.elevideo.backend.dto.videoProcess.JobResponse;
-import com.elevideo.backend.dto.videoProcess.VideoJobCreatedResponse;
-import com.elevideo.backend.dto.videoProcess.VideoJobStatusResponse;
-import com.elevideo.backend.dto.videoProcess.VideoVerticalCreateRequest;
+import com.elevideo.backend.dto.videoProcess.*;
 import com.elevideo.backend.enums.JobStatus;
 import com.elevideo.backend.service.VideoProcessingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,44 +31,24 @@ public class VideoProcessingController {
 
     private final VideoProcessingService videoProcessingService;
 
-    @PostMapping("/vertical")
-    public ResponseEntity<ApiResult<VideoJobCreatedResponse>> processVertical(
-            @PathVariable Long videoId,
-            @RequestBody @Valid VideoVerticalCreateRequest request) {
+    @ProcessVideoEndpointDoc
+    @PostMapping("/process")
+    public ResponseEntity<?> processVideo(@PathVariable Long videoId, @RequestBody @Valid VideoProcessRequest request) {
 
-        VideoJobCreatedResponse response =
-                videoProcessingService.processVertical(videoId, request);
+        VideoJobCreatedResponse response = videoProcessingService.processVideo(videoId, request);
+
+        String message = switch (request.processingMode()) {
+            case VERTICAL -> "Procesamiento vertical iniciado correctamente";
+            case SHORT_AUTO -> "Generación de short automático iniciada";
+            case SHORT_MANUAL -> "Generación de short manual iniciada";
+        };
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(ApiResult.success(response, "Proceso vertical iniciado correctamente"));
+                .body(ApiResult.success(response, message));
     }
 
-//    @PostMapping("/short/auto")
-//    public ResponseEntity<ApiResult<VideoJobCreatedResponse>> processShortAuto(
-//            @PathVariable Long videoId,
-//            @RequestBody @Valid ShortAutoProcessRequest request) {
-//
-//        VideoJobCreatedResponse response =
-//                videoProcessingService.processShortAuto(videoId, request);
-//
-//        return ResponseEntity.status(HttpStatus.ACCEPTED)
-//                .body(ApiResult.success(response, "Short automático iniciado correctamente"));
-//    }
-//
-//    @PostMapping("/short/manual")
-//    public ResponseEntity<ApiResult<VideoJobCreatedResponse>> processShortManual(
-//            @PathVariable Long videoId,
-//            @RequestBody @Valid ShortManualProcessRequest request) {
-//
-//        VideoJobCreatedResponse response =
-//                videoProcessingService.processShortManual(videoId, request);
-//
-//        return ResponseEntity.status(HttpStatus.ACCEPTED)
-//                .body(ApiResult.success(response, "Short manual iniciado correctamente"));
-//    }
-//
 //    @GetMapping("/jobs")
-//    public ResponseEntity<ApiResult<Object>> listJobs(
+//    public ResponseEntity<?> listJobs(
 //            @PathVariable Long videoId) {
 //
 //        Object response =
@@ -72,10 +57,10 @@ public class VideoProcessingController {
 //        return ResponseEntity.ok(
 //                ApiResult.success(response, "Listado de jobs obtenido correctamente"));
 //    }
-//
+
 
     @GetMapping("/jobs/{jobId}")
-    public ResponseEntity<ApiResult<JobResponse>> getJobStatus(
+    public ResponseEntity<?> getJobStatus(
             @PathVariable Long videoId,
             @PathVariable String jobId) {
 
@@ -85,11 +70,9 @@ public class VideoProcessingController {
         return ResponseEntity.ok(
                 ApiResult.success(response, "Estado del job obtenido correctamente"));
     }
-//
+
 //    @PostMapping("/jobs/{jobId}/cancel")
-//    public ResponseEntity<ApiResult<VideoJobStatusResponse>> cancelJob(
-//            @PathVariable Long videoId,
-//            @PathVariable String jobId) {
+//    public ResponseEntity<?> cancelJob(@PathVariable Long videoId, @PathVariable String jobId) {
 //
 //        VideoJobStatusResponse response =
 //                videoProcessingService.cancelJob(videoId, jobId);
@@ -97,14 +80,6 @@ public class VideoProcessingController {
 //        return ResponseEntity.ok(
 //                ApiResult.success(response, "Job cancelado correctamente"));
 //    }
-//
-//    @DeleteMapping("/jobs/{jobId}")
-//    public ResponseEntity<Void> deleteJob(
-//            @PathVariable Long videoId,
-//            @PathVariable String jobId) {
-//
-//        videoProcessingService.deleteJob(videoId, jobId);
-//
-//        return ResponseEntity.noContent().build();
-//    }
+
+
 }

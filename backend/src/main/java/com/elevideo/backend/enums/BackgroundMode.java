@@ -23,11 +23,12 @@ public enum BackgroundMode {
 
     @JsonCreator
     public static BackgroundMode fromValue(String value) {
-        return Arrays.stream(values())
-                .filter(p -> p.value.equalsIgnoreCase(value))
+        return Arrays.stream(BackgroundMode.values())
+                .filter(mode -> mode.value.equalsIgnoreCase(value))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "Invalid platform value: " + value));
+                        "Valor inválido para ProcessingMode: " + value
+                ));
     }
 
 }

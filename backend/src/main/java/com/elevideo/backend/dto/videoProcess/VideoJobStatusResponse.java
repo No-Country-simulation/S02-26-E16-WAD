@@ -4,15 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 
-/**
- * Respuesta del estado de un job de procesamiento.
- *
- * Se usa en dos contextos:
- *   1. Respuesta directa de Python (job en PENDING/PROCESSING) —
- *      Jackson deserializa snake_case con @JsonProperty.
- *   2. Construido desde ProcessingJob en BD (job COMPLETED/FAILED/CANCELLED) —
- *      ProcessingJobMapper lo construye directamente.
- */
 public record VideoJobStatusResponse(
 
         @JsonProperty("job_id")

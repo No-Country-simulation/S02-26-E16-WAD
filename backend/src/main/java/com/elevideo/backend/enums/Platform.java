@@ -23,10 +23,11 @@ public enum Platform {
 
     @JsonCreator
     public static Platform fromValue(String value) {
-        return Arrays.stream(values())
-                .filter(p -> p.value.equalsIgnoreCase(value))
+        return Arrays.stream(Platform.values())
+                .filter(mode -> mode.value.equalsIgnoreCase(value))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "Invalid platform value: " + value));
+                        "Valor inválido para ProcessingMode: " + value
+                ));
     }
 }

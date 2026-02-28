@@ -26,9 +26,11 @@ public enum JobStatus {
 
     @JsonCreator
     public static JobStatus fromValue(String value) {
-        return Arrays.stream(values())
-                .filter(s -> s.value.equalsIgnoreCase(value))
+        return Arrays.stream(JobStatus.values())
+                .filter(mode -> mode.value.equalsIgnoreCase(value))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Invalid status: " + value));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Valor inválido para ProcessingMode: " + value
+                ));
     }
 }

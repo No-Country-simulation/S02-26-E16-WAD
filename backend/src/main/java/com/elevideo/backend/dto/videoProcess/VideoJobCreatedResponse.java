@@ -1,5 +1,7 @@
 package com.elevideo.backend.dto.videoProcess;
 
+import com.elevideo.backend.enums.JobStatus;
+import com.elevideo.backend.enums.ProcessingMode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
@@ -9,13 +11,13 @@ public record VideoJobCreatedResponse(
         UUID jobId,
 
         @JsonProperty("status")
-        String status,
+        JobStatus status,
 
         @JsonProperty("message")
         String message,
 
         @JsonProperty("processing_mode")
-        String processingMode
+        ProcessingMode processingMode
 
 ) {
 }

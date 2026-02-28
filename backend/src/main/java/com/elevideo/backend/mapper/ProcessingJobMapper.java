@@ -1,11 +1,9 @@
 package com.elevideo.backend.mapper;
 
-import com.elevideo.backend.dto.videoProcess.JobResponse;
-import com.elevideo.backend.dto.videoProcess.VideoJobCreatedResponse;
-import com.elevideo.backend.dto.videoProcess.VideoJobStatusResponse;
-import com.elevideo.backend.dto.videoProcess.VideoVerticalCreateRequest;
+import com.elevideo.backend.dto.videoProcess.*;
 import com.elevideo.backend.dto.webhook.ProcessingJobWebhookRequest;
 import com.elevideo.backend.enums.JobStatus;
+import com.elevideo.backend.enums.ProcessingMode;
 import com.elevideo.backend.model.ProcessingJob;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,14 +13,23 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-@Mapper(componentModel = "spring", imports = {JobStatus.class})
+@Mapper(componentModel = "spring", imports = {JobStatus.class, ProcessingMode.class})
 public interface ProcessingJobMapper {
 
-    @Mapping(target = "status", expression = "java(JobStatus.PENDING)")
-    @Mapping(target = "processingMode", expression = "java(request.processingMode())")
-    ProcessingJob toProcessiongJob(VideoVerticalCreateRequest request, VideoJobCreatedResponse response);
+    @Mapping(target = "output.videoUrl", source = "outputUrl")
+    @Mapping(target = "output.thumbnailUrl", source = "thumbnailUrl")
+    @Mapping(target = "output.previewUrl", source = "previewUrl")
+    JobResponse toJobResponse(VideoJobStatusResponse response);
+
+    @Mapping(target = "jobId", source = "response.jobId")
+    @Mapping(target = "status", source = "response.status")
+    @Mapping(target = "processingMode", source = "request.processingMode")
+    ProcessingJob toProcessingJob(VideoProcessRequest request, VideoJobCreatedResponse response);
 
     void updateProcessingJob(ProcessingJobWebhookRequest request, @MappingTarget ProcessingJob processingJob);
+
+
+
 
     default LocalDateTime map(Instant instant) {
         if (instant == null) {
@@ -31,8 +38,5 @@ public interface ProcessingJobMapper {
         return LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
     }
 
-    @Mapping(target = "output.videoUrl", source = "outputUrl")
-    @Mapping(target = "output.thumbnailUrl", source = "thumbnailUrl")
-    @Mapping(target = "output.previewUrl", source = "previewUrl")
-    JobResponse toJobResponse(VideoJobStatusResponse response);
+
 }

@@ -23,10 +23,11 @@ public enum Quality {
 
     @JsonCreator
     public static Quality fromValue(String value) {
-        return Arrays.stream(values())
-                .filter(q -> q.value.equalsIgnoreCase(value))
+        return Arrays.stream(Quality.values())
+                .filter(mode -> mode.value.equalsIgnoreCase(value))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "Invalid quality value: " + value));
+                        "Valor inválido para ProcessingMode: " + value
+                ));
     }
 }
