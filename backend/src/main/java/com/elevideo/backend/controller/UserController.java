@@ -21,7 +21,6 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
-    private Object me;
 
     @GetMapping("/me")
     public ResponseEntity <?> getAuthUser() {
