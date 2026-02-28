@@ -1,5 +1,7 @@
 package com.elevideo.backend.exception;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -25,9 +27,11 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Manejador global de excepciones para toda la aplicación.
@@ -493,6 +497,43 @@ public class GlobalExceptionHandler {
 
         log.warn("📄 Cuerpo de petición ilegible en {}: {}", request.getRequestURI(), ex.getMessage());
 
+        Throwable cause = ex.getCause();
+
+        if (cause instanceof InvalidFormatException ife) {
+
+            Class<?> targetType = ife.getTargetType();
+
+            // 🔎 Caso especial: Enum inválido
+            if (targetType.isEnum()) {
+
+                String fieldName = ife.getPath().stream()
+                        .map(JsonMappingException.Reference::getFieldName)
+                        .findFirst()
+                        .orElse("campo desconocido");
+
+                Object invalidValue = ife.getValue();
+
+                String acceptedValues = Arrays.stream(targetType.getEnumConstants())
+                        .map(Object::toString)
+                        .collect(Collectors.joining(", "));
+
+                ErrorResponse error = ErrorResponse.builder()
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .error("INVALID_ENUM_VALUE")
+                        .message("Valor inválido para campo enum")
+                        .details(List.of(
+                                String.format("El campo '%s' recibió el valor '%s'", fieldName, invalidValue),
+                                String.format("Valores permitidos: [%s]", acceptedValues)
+                        ))
+                        .path(request.getRequestURI())
+                        .build();
+
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+            }
+        }
+
+        // 🔁 Fallback genérico
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())

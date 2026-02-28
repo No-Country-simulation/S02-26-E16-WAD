@@ -26,7 +26,7 @@ public class VideoController {
 
     @CreateVideoEndpointDoc
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResult<VideoResponse>> createVideo(@PathVariable Long projectId,@ModelAttribute @Valid CreateVideoRequest request) {
+    public ResponseEntity<?> createVideo(@PathVariable Long projectId,@ModelAttribute @Valid CreateVideoRequest request) {
         VideoResponse response = videoService.createVideo(projectId, request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResult.success(response, "Video creado correctamente"));
@@ -43,7 +43,7 @@ public class VideoController {
 
     @GetVideoByIdEndpointDoc
     @GetMapping("/{videoId}")
-    public ResponseEntity<ApiResult<VideoSummaryResponse>> getVideoById(@PathVariable Long projectId, @PathVariable Long videoId) {
+    public ResponseEntity<?> getVideoById(@PathVariable Long projectId, @PathVariable Long videoId) {
         VideoSummaryResponse response = videoService.getVideoById(videoId);
         return ResponseEntity.ok(
                 ApiResult.success(response, "Video obtenido correctamente")

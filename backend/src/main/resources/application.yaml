@@ -26,10 +26,14 @@ spring:
 server:
   port: ${PORT:8081}
 
-
-jwt:
-  secret: ${JWT_SECRET:TTE1M0NyM3RLM3lQYXJhSldUc011eVMyZ3VyNHlMNHJnNA==}
-  expiration: ${JWT_EXPIRATION:3600000}
+security:
+  jwt:
+    secret: ${JWT_SECRET:TTE1M0NyM3RLM3lQYXJhSldUc011eVMyZ3VyNHlMNHJnNA==}
+    expiration:
+      authentication: ${JWT_EXPIRATION-AUTHENTICATION:3600000}
+      email-verification: ${JWT_EXPIRATION-EMAIL-VERIFICATION:1800000}
+      password-reset: ${JWT_EXPIRATION-RESET-PASSWORD:1800000}
+      python-service: ${JWT_EXPIRATION_PYTHON-SERVICE:300000}
 
 
 app:
@@ -67,3 +71,10 @@ cloudinary:
 web:
   cors:
     allowed-origins: ${CORS_ALLOWED:http://localhost:*}
+
+
+python:
+  service:
+    url: ${PYTHON_SERVICE_BASE_URL:http://127.0.0.1:8001}
+    api-key: ${PYTHON_SERVICE_APIKEY:prueba}
+

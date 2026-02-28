@@ -40,7 +40,7 @@ public class ProjectController {
 
     // ✅ Listar proyectos del usuario (paginado)
     @GetMapping
-    public ResponseEntity<Page<ProjectResponse>> getUserProjects(
+    public ResponseEntity<?> getUserProjects(
             @AuthenticationPrincipal(expression = "id") UUID userId,
          @ModelAttribute ProjectPageableRequest pageable) {
 
@@ -50,7 +50,7 @@ public class ProjectController {
 
     // ✅ Obtener detalle
     @GetMapping("/{projectId}")
-    public ResponseEntity<ProjectResponse> getProjectById(
+    public ResponseEntity<?> getProjectById(
             @PathVariable Long projectId,
             @AuthenticationPrincipal(expression = "id") UUID userId) {
 
@@ -60,7 +60,7 @@ public class ProjectController {
 
     // ✅ Actualizar
     @PutMapping("/{projectId}")
-    public ResponseEntity<ProjectResponse> updateProject(
+    public ResponseEntity<?> updateProject(
             @PathVariable Long projectId,
             @RequestBody ProjectRequest project,
             @AuthenticationPrincipal(expression = "id") UUID userId) {
@@ -71,7 +71,7 @@ public class ProjectController {
 
     // ✅ Eliminar
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<Void> deleteProject(
+    public ResponseEntity<?> deleteProject(
             @PathVariable Long projectId,
             @AuthenticationPrincipal(expression = "id") UUID userId) {
 
