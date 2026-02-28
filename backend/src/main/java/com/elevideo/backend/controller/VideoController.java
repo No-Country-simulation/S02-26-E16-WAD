@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/projects/{projectId}/videos")
 @RequiredArgsConstructor
-@Tag(name = "03 - Videos", description = "Endpoints para gestión de videos de proyectos")
+@Tag(name = "04 - Videos", description = "Endpoints para gestión de videos de proyectos")
 public class VideoController {
 
     private final VideoService videoService;

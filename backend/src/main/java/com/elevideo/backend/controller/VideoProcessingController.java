@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/videos/{videoId}")
-@Tag(name = "02 - Procesamiento de Video",
-        description = "Procesamiento y gestión de versiones derivadas")
+@Tag(name = "05 - Procesamiento de Video",
+        description = "Endpoints para el procesamiento y gestión de videos")
 @SecurityRequirement(name = "bearerAuth")
 public class VideoProcessingController {
 

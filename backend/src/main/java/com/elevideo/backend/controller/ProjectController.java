@@ -7,6 +7,7 @@ import com.elevideo.backend.dto.project.ProjectResponse;
 import com.elevideo.backend.model.Project;
 import com.elevideo.backend.service.ProjectService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,8 @@ import java.util.UUID;
 @RequestMapping("/projects")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
-
+@Tag(name = "03 - Proyectos",
+        description = "Endpoints para la gestión de proyectos")
 public class ProjectController {
 
     private final ProjectService projectService;
