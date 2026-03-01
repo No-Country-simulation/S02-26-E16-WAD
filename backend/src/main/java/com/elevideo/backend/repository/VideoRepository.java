@@ -8,14 +8,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public interface VideoRepository extends JpaRepository<Video, Long> {
 
     @Query("""
-        SELECT v FROM Video v 
-        WHERE v.project.id = :projectId
-        AND (:searchTerm IS NULL OR LOWER(v.title) LIKE LOWER(CONCAT('%', :searchTerm, '%')))
-        AND (:status IS NULL OR v.status = :status)
-        """)
+    SELECT v FROM Video v 
+    WHERE v.project.id = :projectId
+    AND (:searchTerm IS NULL OR v.title ILIKE :searchTerm)
+    AND (:status IS NULL OR v.status = :status)
+    """)
     Page<Video> findProjectVideos(
             @Param("projectId") Long projectId,
             @Param("searchTerm") String searchTerm,
@@ -23,4 +26,5 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
             Pageable pageable
     );
 
+    Optional<Video> findByIdAndProjectUserId(Long videoId, UUID userId);
 }

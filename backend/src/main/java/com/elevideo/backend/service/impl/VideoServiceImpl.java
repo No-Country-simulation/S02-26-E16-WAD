@@ -74,11 +74,15 @@ public class VideoServiceImpl implements VideoService {
             throw new ForbiddenException("No tienes permiso para ver los videos de este proyecto");
         }
 
+        String formattedSearch = searchParams.searchTerm() == null || searchParams.searchTerm().isBlank()
+                ? null
+                : "%" + searchParams.searchTerm().trim() + "%";
+
         // Buscar videos del proyecto
         Pageable pageable = searchParams.toPageable();
         Page<Video> videos = videoRepository.findProjectVideos(
                 projectId,
-                searchParams.searchTerm(),
+                formattedSearch,
                 searchParams.status(),
                 pageable
         );

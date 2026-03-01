@@ -7,6 +7,7 @@ import com.elevideo.backend.dto.project.ProjectResponse;
 import com.elevideo.backend.model.Project;
 import com.elevideo.backend.service.ProjectService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,8 @@ import java.util.UUID;
 @RequestMapping("/projects")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
-
+@Tag(name = "03 - Proyectos",
+        description = "Endpoints para la gestión de proyectos")
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -40,7 +42,7 @@ public class ProjectController {
 
     // ✅ Listar proyectos del usuario (paginado)
     @GetMapping
-    public ResponseEntity<Page<ProjectResponse>> getUserProjects(
+    public ResponseEntity<?> getUserProjects(
             @AuthenticationPrincipal(expression = "id") UUID userId,
          @ModelAttribute ProjectPageableRequest pageable) {
 
@@ -50,7 +52,7 @@ public class ProjectController {
 
     // ✅ Obtener detalle
     @GetMapping("/{projectId}")
-    public ResponseEntity<ProjectResponse> getProjectById(
+    public ResponseEntity<?> getProjectById(
             @PathVariable Long projectId,
             @AuthenticationPrincipal(expression = "id") UUID userId) {
 
@@ -60,7 +62,7 @@ public class ProjectController {
 
     // ✅ Actualizar
     @PutMapping("/{projectId}")
-    public ResponseEntity<ProjectResponse> updateProject(
+    public ResponseEntity<?> updateProject(
             @PathVariable Long projectId,
             @RequestBody ProjectRequest project,
             @AuthenticationPrincipal(expression = "id") UUID userId) {
@@ -71,7 +73,7 @@ public class ProjectController {
 
     // ✅ Eliminar
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<Void> deleteProject(
+    public ResponseEntity<?> deleteProject(
             @PathVariable Long projectId,
             @AuthenticationPrincipal(expression = "id") UUID userId) {
 

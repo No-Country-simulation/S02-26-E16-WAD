@@ -1,5 +1,6 @@
 package com.elevideo.backend.security;
 
+import com.elevideo.backend.config.JwtExpirationProperties;
 import com.elevideo.backend.dto.JwtDataDto;
 import com.elevideo.backend.enums.TokenPurpose;
 import com.elevideo.backend.exception.TokenExpiredException;
@@ -11,7 +12,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -27,37 +29,69 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
-    @Value("${jwt.secret}")
-    private String secretKey;
-
-    @Value("${jwt.expiration}")
-    private long expirationTimeInMs;
-
-    private SecretKey key;
-
+    private final JwtExpirationProperties jwtProperties;
     private final TokenBlacklistService blacklistService;
+    private SecretKey key;
 
     @PostConstruct
     public void init() {
-        if (secretKey.length() < 32) {
+        if (jwtProperties.getSecret().length() < 32) {
             throw new IllegalArgumentException("La clave secreta JWT debe tener al menos 32 caracteres.");
         }
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(JwtDataDto jwtData, TokenPurpose purpose) {
+    public String generateUserToken(JwtDataDto jwtData, TokenPurpose purpose) {
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("email", jwtData.email());
+        claims.put("scope", purpose.name());
+
+        if (purpose == TokenPurpose.AUTHENTICATION) {
+            claims.put("firstName", jwtData.firstName());
+            claims.put("lastName", jwtData.lastName());
+        }
+
+        return buildToken(
+                jwtData.id().toString(),                 // sub
+                jwtProperties.getIssuer(),               // iss
+                purpose.resolveAudience(),               // aud
+                claims,
+                purpose.resolveExpiration(jwtProperties)
+        );
+    }
+
+    public String generateServiceToken(UUID userId) {
+        return buildToken(
+                userId.toString(),                         // sub
+                jwtProperties.getIssuer(),                 // iss
+                "python-service",                          // aud
+                Map.of("scope", TokenPurpose.PYTHON_SERVICE.name(),
+                       "token_type", "DELEGATED_SERVICE"
+                ),
+                TokenPurpose.PYTHON_SERVICE.resolveExpiration(jwtProperties)
+        );
+    }
+
+    private String buildToken(
+            String subject,
+            String issuer,
+            String audience,
+            Map<String, Object> claims,
+            long expirationMillis
+    ) {
+
         Instant now = Instant.now();
-        Instant expiration = now.plusMillis(expirationTimeInMs);
+        Instant expiration = now.plusMillis(expirationMillis);
 
         return Jwts.builder()
-                .subject(jwtData.id().toString())
+                .subject(subject)
+                .issuer(issuer)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(expiration))
-                .claim("email", jwtData.email())
-                .claim("firstName",jwtData.firstName())
-                .claim("lastName",jwtData.lastName())
-                .claim("purpose", purpose.name())
+                .claim("aud", audience)
+                .claims(claims)
                 .signWith(key)
                 .compact();
     }
@@ -101,8 +135,6 @@ public class JwtService {
         }
     }
 
-
-
     public String extractEmail(String token) {
         return extractClaim(token, claims -> claims.get("email", String.class));
     }
@@ -116,7 +148,7 @@ public class JwtService {
     }
 
     public TokenPurpose extractPurpose(String token) {
-        return TokenPurpose.valueOf(extractClaim(token, claims -> claims.get("purpose", String.class)));
+        return TokenPurpose.valueOf(extractClaim(token, claims -> claims.get("scope", String.class)));
     }
 
     public LocalDateTime extractExpiration(String token) {

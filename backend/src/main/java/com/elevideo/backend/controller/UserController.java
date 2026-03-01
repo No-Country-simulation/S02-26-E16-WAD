@@ -7,6 +7,7 @@ import com.elevideo.backend.dto.user.UserRes;
 import com.elevideo.backend.dto.user.UserUpdateRequest;
 import com.elevideo.backend.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,8 @@ import java.util.UUID;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
-
+@Tag(name = "02 - Usuarios",
+        description = "Endpoints para la gestión de cuentas de usuarios")
 public class UserController {
 
     private final UserService userService;
