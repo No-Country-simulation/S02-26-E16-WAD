@@ -46,6 +46,7 @@ public class VideoRenditionServiceImpl implements VideoRenditionService {
         rendition.setVideo(job.getVideo());
         rendition.setProcessingJob(job);
         rendition.setPlatform(job.getPlatform());
+        rendition.setBackgroundMode(job.getBackgroundMode());
 
         VideoRendition saved = videoRenditionRepository.save(rendition);
 

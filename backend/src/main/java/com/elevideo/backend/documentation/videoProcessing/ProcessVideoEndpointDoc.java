@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Operation(
-        summary = "Procesar video (modo unificado)",
+        summary = "Procesar video",
         description = """
             Procesa un video según el modo especificado en el campo 'processingMode'.
             
