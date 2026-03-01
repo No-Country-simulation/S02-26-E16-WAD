@@ -55,11 +55,9 @@ springdoc:
 
 logging:
   level:
-    root: INFO
-    org.springframework.web: DEBUG
-    com.elevideo.backend: DEBUG   # o TRACE para ver todo
-    org.hibernate.SQL: DEBUG      # para ver queries SQL
-    org.hibernate.orm.jdbc.bind: TRACE  # parámetros de queries
+    org.hibernate.SQL: ERROR
+    org.hibernate.type: ERROR
+    org.hibernate.stat: ERROR
 
 
 cloudinary:

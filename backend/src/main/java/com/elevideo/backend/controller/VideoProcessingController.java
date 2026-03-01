@@ -3,20 +3,12 @@ package com.elevideo.backend.controller;
 import com.elevideo.backend.documentation.videoProcessing.ProcessVideoEndpointDoc;
 import com.elevideo.backend.dto.ApiResult;
 import com.elevideo.backend.dto.videoProcess.*;
-import com.elevideo.backend.enums.JobStatus;
 import com.elevideo.backend.service.VideoProcessingService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +39,14 @@ public class VideoProcessingController {
                 .body(ApiResult.success(response, message));
     }
 
+
+    @GetMapping("/rendition")
+    public ResponseEntity<?> getVideosRendition(@PathVariable Long videoId, @ModelAttribute VideoRenditionSearchRequest request) {
+        Page<VideoRenditionResponse> responses = videoProcessingService.getVideosRendition(videoId, request);
+        return ResponseEntity
+                .ok(ApiResult.success(responses, "Busqueda exitosa"));
+
+    }
 //    @GetMapping("/jobs")
 //    public ResponseEntity<?> listJobs(
 //            @PathVariable Long videoId) {
@@ -71,15 +71,14 @@ public class VideoProcessingController {
                 ApiResult.success(response, "Estado del job obtenido correctamente"));
     }
 
-//    @PostMapping("/jobs/{jobId}/cancel")
-//    public ResponseEntity<?> cancelJob(@PathVariable Long videoId, @PathVariable String jobId) {
-//
-//        VideoJobStatusResponse response =
-//                videoProcessingService.cancelJob(videoId, jobId);
-//
-//        return ResponseEntity.ok(
-//                ApiResult.success(response, "Job cancelado correctamente"));
-//    }
+    @PostMapping("/jobs/{jobId}/cancel")
+    public ResponseEntity<?> cancelJob(@PathVariable Long videoId, @PathVariable String jobId) {
+
+        VideoJobCancelResponse response = videoProcessingService.cancelJob(videoId, jobId);
+
+        return ResponseEntity.ok(
+                ApiResult.success(response, "Job cancelado correctamente"));
+    }
 
 
 }

@@ -1,7 +1,7 @@
 package com.elevideo.backend.service;
 
-import com.elevideo.backend.aspect.LogExecution;
 import com.elevideo.backend.dto.videoProcess.*;
+import org.springframework.data.domain.Page;
 
 public interface VideoProcessingService {
 
@@ -9,9 +9,8 @@ public interface VideoProcessingService {
 
     JobResponse getJobStatus(Long videoId, String jobId);
 
-//    VideoJobStatusResponse cancelJob(String jobId);
-//
-//    void deleteJob(String jobId);
-//
-//    Object listJobs();
+    VideoJobCancelResponse cancelJob(Long VideoId,String jobId);
+
+    Page<VideoRenditionResponse> getVideosRendition(Long videoId, VideoRenditionSearchRequest request);
+
 }

@@ -1,5 +1,6 @@
 package com.elevideo.backend.mapper;
 
+import com.elevideo.backend.dto.videoProcess.VideoRenditionResponse;
 import com.elevideo.backend.dto.webhook.ProcessingJobWebhookRequest;
 import com.elevideo.backend.model.ProcessingJob;
 import com.elevideo.backend.model.Video;
@@ -10,6 +11,7 @@ import org.mapstruct.Mapping;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface VideoRenditionMapper {
@@ -18,6 +20,10 @@ public interface VideoRenditionMapper {
     @Mapping(target = "processingMode", source = "request.processingMode")
     @Mapping(target = "createdAt", ignore = true)
     VideoRendition toVideoRendition(ProcessingJobWebhookRequest request);
+
+    VideoRenditionResponse toVideoRenditionResponse(VideoRendition entity);
+
+    List<VideoRenditionResponse> toVideoRenditionResponse(List<VideoRendition> entities);
 
 
 }
