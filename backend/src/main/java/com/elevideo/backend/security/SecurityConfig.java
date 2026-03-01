@@ -12,11 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-//config cors
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import java.util.Arrays;
+
 
 @Configuration
 @RequiredArgsConstructor
@@ -59,29 +55,5 @@ public class SecurityConfig {
                         .accessDeniedHandler(customAccessDeniedHandler))
                 .build();
     }
-
-        @Bean
-        public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        
-        // 1. Permitimos tu URL de Netlify y tu entorno local
-        configuration.setAllowedOrigins(Arrays.asList(
-                "https://pro556.netlify.app", 
-                "http://localhost:5173"
-        ));
-        
-        // 2. Permitimos los métodos HTTP necesarios
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        
-        // 3. Permitimos las cabeceras necesarias
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept"));
-        
-        // 4. Permitimos el envío de credenciales/cookies (importante para JWT)
-        configuration.setAllowCredentials(true);
-        
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-        }
 
 }

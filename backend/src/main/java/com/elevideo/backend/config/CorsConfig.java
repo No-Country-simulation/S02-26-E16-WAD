@@ -13,15 +13,34 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
-  @Value("${web.cors.allowed-origins}")
-  private String corsAllowedOrigins;
+  //@Value("${web.cors.allowed-origins}")
+  //private String corsAllowedOrigins;
 
-  @Bean
+  //@Bean
+  //public CorsConfigurationSource corsConfigurationSource() {
+  //CorsConfiguration configuration = new CorsConfiguration();
+   // configuration.setAllowedOriginPatterns(Arrays.stream(corsAllowedOrigins.split(",")).map(String::trim).toList());
+   //configuration.setAllowedMethods(List.of("OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"));
+   // configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+    //configuration.setAllowCredentials(true);
+   // configuration.setMaxAge(3600L);
+
+    //UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    //source.registerCorsConfiguration("/**", configuration);
+   // return source;
+
+    @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOriginPatterns(Arrays.stream(corsAllowedOrigins.split(",")).map(String::trim).toList());
+    
+    // Al usar "AllowedOriginPatterns" con "*" permites CUALQUIER dominio
+    // Esto es ideal para repositorios públicos y simulaciones.
+    configuration.setAllowedOriginPatterns(List.of("*"));
+    
     configuration.setAllowedMethods(List.of("OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"));
-    configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+    configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept"));
+    
+    // Esto es vital para que funcionen los tokens JWT
     configuration.setAllowCredentials(true);
     configuration.setMaxAge(3600L);
 
@@ -30,3 +49,4 @@ public class CorsConfig {
     return source;
   }
 }
+
