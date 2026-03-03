@@ -13,4 +13,12 @@ public interface VideoProcessingService {
 
     Page<VideoRenditionResponse> getVideosRendition(Long videoId, VideoRenditionSearchRequest request);
 
+    VideoRenditionResponse getVideosRenditionById(Long videoId, Long renditionId);
+
+    void deleteVideosRenditionById(Long videoId, Long renditionId);
+
+    Page<ActiveJobResponse> listActiveJobs(
+            Long videoId,
+            JobSearchRequest request
+    );
 }

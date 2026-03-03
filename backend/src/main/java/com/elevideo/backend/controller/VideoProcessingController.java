@@ -47,35 +47,42 @@ public class VideoProcessingController {
                 .ok(ApiResult.success(responses, "Busqueda exitosa"));
 
     }
-//    @GetMapping("/jobs")
-//    public ResponseEntity<?> listJobs(
-//            @PathVariable Long videoId) {
-//
-//        Object response =
-//                videoProcessingService.listJobs(videoId);
-//
-//        return ResponseEntity.ok(
-//                ApiResult.success(response, "Listado de jobs obtenido correctamente"));
-//    }
+
+    @GetMapping("/rendition/{renditionId}")
+    public ResponseEntity<?> getVideosRenditionById(@PathVariable Long videoId, Long renditionId) {
+        VideoRenditionResponse responses = videoProcessingService.getVideosRenditionById(videoId, renditionId);
+        return ResponseEntity
+                .ok(ApiResult.success(responses, "Busqueda exitosa"));
+
+    }
+
+    @DeleteMapping("/rendition/{renditionId}")
+    public ResponseEntity<?> deleteVideosRendition(@PathVariable Long videoId, Long renditionId) {
+        videoProcessingService.deleteVideosRenditionById(videoId, renditionId);
+        return ResponseEntity
+                .noContent().build();
+
+    }
+
+    @GetMapping("/jobs")
+    public ResponseEntity<?> listJobs(@PathVariable Long videoId, @ModelAttribute JobSearchRequest request) {
+        Page<ActiveJobResponse> response = videoProcessingService.listActiveJobs(videoId, request);
+        return ResponseEntity
+                .ok(ApiResult.success(response, "Listado de jobs activos obtenido correctamente")
+        );
+    }
 
 
     @GetMapping("/jobs/{jobId}")
-    public ResponseEntity<?> getJobStatus(
-            @PathVariable Long videoId,
-            @PathVariable String jobId) {
-
-        JobResponse response =
-                videoProcessingService.getJobStatus(videoId, jobId);
-
+    public ResponseEntity<?> getJobStatus(@PathVariable Long videoId, @PathVariable String jobId) {
+        JobResponse response = videoProcessingService.getJobStatus(videoId, jobId);
         return ResponseEntity.ok(
                 ApiResult.success(response, "Estado del job obtenido correctamente"));
     }
 
     @PostMapping("/jobs/{jobId}/cancel")
     public ResponseEntity<?> cancelJob(@PathVariable Long videoId, @PathVariable String jobId) {
-
         VideoJobCancelResponse response = videoProcessingService.cancelJob(videoId, jobId);
-
         return ResponseEntity.ok(
                 ApiResult.success(response, "Job cancelado correctamente"));
     }

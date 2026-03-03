@@ -15,6 +15,7 @@ import com.elevideo.backend.model.VideoRendition;
 import com.elevideo.backend.repository.ProcessingJobRepository;
 import com.elevideo.backend.repository.VideoRenditionRepository;
 import com.elevideo.backend.repository.VideoRepository;
+import com.elevideo.backend.repository.spec.ProcessingJobSpecification;
 import com.elevideo.backend.repository.spec.VideoRenditionSpecification;
 import com.elevideo.backend.security.CurrentUserProvider;
 import com.elevideo.backend.service.VideoProcessingService;
@@ -110,6 +111,7 @@ public class VideoProcessingServiceImpl implements VideoProcessingService {
         );
     }
 
+    @LogExecution
     @Override
     public Page<VideoRenditionResponse> getVideosRendition(Long videoId, VideoRenditionSearchRequest request
     ) {
@@ -143,31 +145,47 @@ public class VideoProcessingServiceImpl implements VideoProcessingService {
 
     }
 
-//    /**
-//     * Elimina un job del historial.
-//     */
-//    @Override
-//    public void deleteJob(String jobId) {
-//        UUID userId = currentUserProvider.getCurrentUserId();
-//
-//        pythonServiceClient.delete(
-//                "/api/video/jobs/" + jobId,
-//                userId
-//        );
-//    }
-//
-//    /**
-//     * Lista todos los jobs del usuario.
-//     * Python filtra automáticamente por el userId del JWT.
-//     */
-//    @Override
-//    public Object listJobs() {
-//        UUID userId = currentUserProvider.getCurrentUserId();
-//
-//        return pythonServiceClient.get(
-//                "/api/video/jobs",
-//                Object.class,
-//                userId
-//        );
-//    }
+    @LogExecution
+    @Override
+    public VideoRenditionResponse getVideosRenditionById(Long videoId, Long renditionId) {
+        UUID userId = currentUserProvider.getCurrentUserId();
+
+        VideoRendition videoRendition = videoRenditionRepository.findByIdAndVideo_Project_User_Id(renditionId, userId).
+                orElseThrow(()-> new VideoNotFoundException("Video no encontrado con id: " + renditionId));
+
+        return videoRenditionMapper.toVideoRenditionResponse(videoRendition);
+    }
+
+    @Override
+    public void deleteVideosRenditionById(Long videoId, Long renditionId) {
+        UUID userId = currentUserProvider.getCurrentUserId();
+        VideoRendition videoRendition = videoRenditionRepository.findByIdAndVideo_Project_User_Id(renditionId, userId).
+                orElseThrow(()-> new VideoNotFoundException("Video no encontrado con id: " + renditionId));
+
+        videoRenditionRepository.delete(videoRendition);
+    }
+
+
+    @Override
+    public Page<ActiveJobResponse> listActiveJobs(
+            Long videoId,
+            JobSearchRequest request
+    ) {
+
+        UUID userId = currentUserProvider.getCurrentUserId();
+
+        Specification<ProcessingJob> spec =
+                Specification.allOf(
+                        ProcessingJobSpecification.belongsToVideoAndUser(videoId, userId),
+                        ProcessingJobSpecification.hasActiveStatus(),
+                        ProcessingJobSpecification.hasProcessingMode(request.processingMode()),
+                        ProcessingJobSpecification.hasPlatform(request.platform()),
+                        ProcessingJobSpecification.hasBackgroundMode(request.backgroundMode())
+                );
+
+        Page<ProcessingJob> page =
+                processingJobRepository.findAll(spec, request.toPageable());
+
+        return page.map(processingJobMapper::toActiveJobResponse);
+    }
 }

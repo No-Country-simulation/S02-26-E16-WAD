@@ -28,7 +28,8 @@ public interface ProcessingJobMapper {
 
     void updateProcessingJob(ProcessingJobWebhookRequest request, @MappingTarget ProcessingJob processingJob);
 
-
+    @Mapping(target = "status", expression = "java(entity.getStatus().getValue())")
+    ActiveJobResponse toActiveJobResponse(ProcessingJob entity);
 
 
     default LocalDateTime map(Instant instant) {
