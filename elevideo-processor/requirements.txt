@@ -1,0 +1,23 @@
+# ─── API ──────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.9
+starlette>=0.37.0
+
+# ─── Validación y schemas ─────────────────────
+pydantic>=2.7.0
+
+# ─── Autenticación ────────────────────────────
+PyJWT>=2.8.0
+
+# ─── Cloudinary ───────────────────────────────
+cloudinary>=1.40.0
+requests>=2.32.0
+
+# ─── Procesamiento de video ───────────────────
+opencv-python>=4.10.0
+mediapipe==0.10.9
+numpy>=1.26.0
+
+# ─── Utilidades ───────────────────────────────
+python-dotenv>=1.0.0
