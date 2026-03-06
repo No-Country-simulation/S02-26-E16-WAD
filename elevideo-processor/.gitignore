@@ -1,0 +1,56 @@
+# ─── Entorno ──────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── Python ───────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+
+# ─── Entornos virtuales ───────────────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ─── Temporales de procesamiento ─────────────
+temp/
+/tmp/video_processing/
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.jpg
+*.jpeg
+*.png
+!docs/**/*.png
+
+# ─── Cache de optimización ───────────────────
+/tmp/video_processing/cache/
+*.json.cache
+
+# ─── IDEs ─────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# ─── Logs ─────────────────────────────────────
+*.log
+logs/
+
+# ─── Tests ────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
