@@ -21,7 +21,7 @@ Convierte videos horizontales a formato vertical 9:16 con detección de rostros,
 - [¿Qué es Elevideo?](#-qué-es-elevideo)
 - [Arquitectura del sistema](#-arquitectura-del-sistema)
 - [Demos y deploys](#-demos-y-deploys)
-- [Repositorios del proyecto](#-repositorios-del-proyecto)
+- [Estructura del Repositorio](#-estructura-del-repositorio)
 - [Stack tecnológico](#-stack-tecnológico)
 - [El equipo](#-el-equipo)
 
@@ -59,24 +59,24 @@ Elevideo está compuesto por tres servicios independientes que se comunican entr
                             │ HTTPS
                             ▼
 ┌─────────────────────────────────────────────────────────┐
-│              Frontend  (React + Tailwind CSS)            │
+│              Frontend  (React + Tailwind CSS)           │
 │                   elevideo.vercel.app                   │
 └───────────────────────────┬─────────────────────────────┘
                             │ REST API + JWT
                             ▼
 ┌─────────────────────────────────────────────────────────┐
-│           Backend Spring Boot  (Monolito Modular)        │
+│           Backend Spring Boot  (Monolito Modular)       │
 │             elevideo-ec.onrender.com                    │
 │                                                         │
 │   auth │ user │ project │ video │ processing │ notif.   │
-└──────────────┬───────────────────────┬──────────────────┘
+└──────────────┬───────────────────────▲──────────────────┘
                │ HTTP + JWT delegado   │ Webhooks
                │                       │ (X-Service-Key)
                ▼                       │
 ┌──────────────────────────┐           │
 │   Microservicio Python   │───────────┘
 │   FastAPI + MediaPipe    │
-│     (solo local ⚠️)      │
+│     (solo local)         │
 └──────────────────────────┘
 ```
 
@@ -116,8 +116,8 @@ elevideo/
 Cada servicio tiene su propio README con instrucciones detalladas de instalación y configuración:
 
 - 📖 [README — Backend](./backend/README.md)
-- 📖 [README — Frontend](./frontend/README.md)
-- 📖 [README — Microservicio Python](./video-processor/README.md)
+- 📖 [README — Frontend](./Frontend/readme.md)
+- 📖 [README — Microservicio Python](./elevideo-processor/README.md)
 
 ---
 
